@@ -59,15 +59,15 @@ class SimdV {
   }
 
   static Float32x4 dotV(final Float32x4 xyz, final Float32x4 abc) {
-    final Float32x4 prod = xyz * abc;
-    final Float32x4 t1 = prod.shuffle(Float32x4.YZXW);
-    final Float32x4 t2 = prod.shuffle(Float32x4.ZXYW);
+    var prod = xyz * abc;
+    var t1 = prod.shuffle(Float32x4.YZXW);
+    var t2 = prod.shuffle(Float32x4.ZXYW);
     return prod + t1 + t2;
   }
 
   static Float32x4 ReflectIn(final Float32x4 xyz, final Float32x4 normal) {
-    final Float32x4 negVector = xyz.scale(-1.0);
-    final Float32x4 dotx2 = dotV(negVector, normal).scale(2.0);
+    var negVector = xyz.scale(-1.0);
+    var dotx2 = dotV(negVector, normal).scale(2.0);
     return normal * dotx2 - negVector;
   }
 
@@ -119,11 +119,11 @@ class Sphere extends RTObject {
 
   double Intersect(final Ray ray) {
     // cos of angle between dirs from origin to us and from origin to where the ray's pointing
-    final Float32x4 lightFromOrigins = position - ray.origin;
-    final Float32x4 v = SimdV.dotV(lightFromOrigins, ray.direction);
-    final Float32x4 lo = SimdV.dotV(lightFromOrigins, lightFromOrigins);
-    final Float32x4 t = v * v - lo;
-    final double hitDistance =  radius + t.x;
+    var lightFromOrigins = position - ray.origin;
+    var v = SimdV.dotV(lightFromOrigins, ray.direction);
+    var lo = SimdV.dotV(lightFromOrigins, lightFromOrigins);
+    var t = v * v - lo;
+    num hitDistance =  radius + t.x;
     // no hit (do this check now before bothering to do the sqrt below)
     if (hitDistance < 0) {
       return  -1.0;
